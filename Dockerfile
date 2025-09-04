@@ -1,25 +1,25 @@
-# Use official Node
+# --- Build Stage ---
 FROM node:18 AS builder
-
 WORKDIR /app
 
+# Copy package files
 COPY package*.json ./
-COPY pnpm-lock.yaml* ./
 
-RUN npm install -g pnpm
+# Install only production deps
+RUN npm ci --omit=dev
 
-# Install only prod deps in build
-RUN pnpm install --frozen-lockfile --prod
-
+# Copy source files
 COPY . .
 
-RUN pnpm build
+# Build frontend
+RUN npm run build
 
-# Run with a smaller final image (optional)
+# --- Run Stage ---
 FROM node:18-alpine AS runner
 WORKDIR /app
 
-COPY --from=builder /app ./
+# Copy everything from builder stage
+COPY --from=builder /app /app
 
 EXPOSE 3000
-CMD ["pnpm", "start"]
+CMD ["npm", "start"]
