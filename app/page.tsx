@@ -34,7 +34,16 @@ export default function ChatPage() {
     setIsLoading(true)
 
     try {
-  const res = await fetch(`http://34.224.38.76:8001/api/query/?query=${encodeURIComponent(input.trim())}`)
+      const res = await fetch(`http://34.224.38.76:8001/api/query/?query=${encodeURIComponent(input.trim())}`,
+        {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+          }
+        }
+      )
       let resultContent = "No result returned."
       if (!res.ok) {
         // Error response from backend
