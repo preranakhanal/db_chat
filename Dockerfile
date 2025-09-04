@@ -3,15 +3,16 @@
 FROM node:20-alpine AS runner
 WORKDIR /app
 
-# Copy package files and install dependencies
+# Copy package files and source
 COPY package*.json ./
-RUN npm install --omit=dev
-
-# Copy build output and config
-COPY .next ./.next
 COPY public ./public
 COPY next.config.mjs ./next.config.mjs
-# Copy .env if it exists
+COPY . .
+
+# Install dependencies and build
+RUN npm install --omit=dev && npm run build
+
+# Optionally copy .env if present (ignore error if missing)
 COPY .env ./.env
 
 EXPOSE 3000
