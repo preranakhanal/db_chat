@@ -1,13 +1,25 @@
-# Next.js frontend Dockerfile
-FROM node:20-alpine AS builder
+# Use official Node
+FROM node:18 AS builder
+
 WORKDIR /app
-COPY package.json pnpm-lock.yaml ./
-RUN npm install -g pnpm && pnpm install
+
+COPY package*.json ./
+COPY pnpm-lock.yaml* ./
+
+RUN npm install -g pnpm
+
+# Install only prod deps in build
+RUN pnpm install --frozen-lockfile --prod
+
 COPY . .
+
 RUN pnpm build
 
-FROM node:20-alpine AS runner
+# Run with a smaller final image (optional)
+FROM node:18-alpine AS runner
 WORKDIR /app
-COPY --from=builder /app .
+
+COPY --from=builder /app ./
+
 EXPOSE 3000
 CMD ["pnpm", "start"]
