@@ -12,8 +12,6 @@ COPY . .
 # Install dependencies and build
 RUN npm install --omit=dev && npm run build
 
-# Optionally copy .env if present (ignore error if missing)
-COPY .env ./.env
 
 EXPOSE 3000
 CMD ["npm", "start"]
