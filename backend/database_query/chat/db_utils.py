@@ -1,0 +1,57 @@
+
+from django.db import connections
+from django.conf import settings
+from django.db.utils import OperationalError
+
+def ensure_dynamic_registered(alias="dynamic"):
+    if alias not in settings.DATABASES:
+        params = {
+            "NAME": "education_platform",
+            "USER": "postgres",
+            "PASSWORD": "root",
+            "HOST": "localhost",
+            "PORT": 5432,
+        }
+        register_database(alias, params)
+
+def register_database(alias, params):
+    settings.DATABASES[alias] = {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": params.get("NAME", "education_platform"),
+        "USER": params.get("USER", "postgres"),
+        "PASSWORD": params.get("PASSWORD", "root"),
+        "HOST": params.get("HOST", "localhost"),
+        "PORT": params.get("PORT", 5432),
+        "OPTIONS": {},
+        "TIME_ZONE": getattr(settings, "TIME_ZONE", None),
+        "ATOMIC_REQUESTS": False,
+        "CONN_HEALTH_CHECKS": False,
+        "CONN_MAX_AGE": 0,
+        "AUTOCOMMIT": True,
+    }
+
+def test_connection(alias="dynamic"):
+    try:
+        connections[alias].cursor()
+        return True
+    except OperationalError:
+        return False
+
+def get_schema(alias="dynamic"):
+    ensure_dynamic_registered(alias)
+    sql = """
+    SELECT table_name, column_name, data_type
+    FROM information_schema.columns
+    WHERE table_schema='public';
+    """
+    with connections[alias].cursor() as cursor:
+        cursor.execute(sql)
+        return cursor.fetchall()
+
+def run_sql(sql, alias="dynamic"):
+    ensure_dynamic_registered(alias)
+    with connections[alias].cursor() as cursor:
+        cursor.execute(sql)
+        cols = [col[0] for col in cursor.description]
+        rows = cursor.fetchall()
+    return [dict(zip(cols, row)) for row in rows]
