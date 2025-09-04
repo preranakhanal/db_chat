@@ -13,4 +13,4 @@ COPY . .
 RUN npm install && npm run build
 
 EXPOSE 3000
-CMD ["npm", "start"]
+CMD ["npm", "start", "--", "-H", "0.0.0.0"]

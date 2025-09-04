@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-1t6b9eqy(abubtf%m%xz#6*j3wro&g!acqlmr716ii!^c3fs=3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "34.224.38.76"]
 
 
 # Application definition
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -70,8 +71,9 @@ TEMPLATES = [
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://34.224.38.76:3000",
-    "http://34.224.38.76:8001",
 ]
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOW_CREDENTIALS = True
 
 WSGI_APPLICATION = 'database_query.wsgi.application'
 

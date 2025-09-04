@@ -14,5 +14,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Expose port 8001
 EXPOSE 8001
 
+# Install and configure CORS headers
+RUN pip install django-cors-headers
+
 # Run migrations and start server
 CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8001"]
