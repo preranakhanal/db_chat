@@ -10,13 +10,14 @@ RUN apt-get update && apt-get install -y \
     libsqlite3-dev \
     && rm -rf /var/lib/apt/lists/*
 
+
 # Copy backend code
 COPY . /app
-
 
 # Install Python dependencies
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
+
 
 # Expose port 8001
 EXPOSE 8001
