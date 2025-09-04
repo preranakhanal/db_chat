@@ -10,8 +10,7 @@ COPY next.config.mjs ./next.config.mjs
 COPY . .
 
 # Install dependencies and build
-RUN npm install --omit=dev && npm run build
-
+RUN npm install && npm run build
 
 EXPOSE 3000
 CMD ["npm", "start"]
