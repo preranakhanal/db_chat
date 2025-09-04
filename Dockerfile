@@ -3,12 +3,15 @@
 FROM node:20-alpine AS runner
 WORKDIR /app
 
-# Copy only what's needed to serve the built app
+# Copy package files and install dependencies
 COPY package*.json ./
+RUN npm install --omit=dev
+
+# Copy build output and config
 COPY .next ./.next
 COPY public ./public
-COPY node_modules ./node_modules
 COPY next.config.mjs ./next.config.mjs
+# Copy .env if it exists
 COPY .env ./.env
 
 EXPOSE 3000
