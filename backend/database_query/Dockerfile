@@ -13,12 +13,10 @@ RUN apt-get update && apt-get install -y \
 # Copy backend code
 COPY . /app
 
+
 # Install Python dependencies
-# If you have requirements.txt, uncomment below and add the file
-# COPY requirements.txt /app/
-# RUN pip install --no-cache-dir -r requirements.txt
-# For now, install Django and any other needed packages directly
-RUN pip install --no-cache-dir django
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Expose port 8001
 EXPOSE 8001
