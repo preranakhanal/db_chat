@@ -69,6 +69,8 @@ TEMPLATES = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "http://34.224.38.76:3000",
+    "http://34.224.38.76:8001",
 ]
 
 WSGI_APPLICATION = 'database_query.wsgi.application'

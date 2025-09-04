@@ -6,11 +6,11 @@ from django.db.utils import OperationalError
 def ensure_dynamic_registered(alias="dynamic"):
     if alias not in settings.DATABASES:
         params = {
-            "NAME": "education_platform",
-            "USER": "postgres",
-            "PASSWORD": "root",
-            "HOST": "localhost",
-            "PORT": 5432,
+            "NAME": "smis_ai_db",
+            "USER": "smis_aiuser",
+            "PASSWORD": "smisai",
+            "HOST": "myschool.smis.online",
+            "PORT": 6464,
         }
         register_database(alias, params)
 

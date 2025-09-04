@@ -16,4 +16,4 @@ services:
       - "3000:3000"
     restart: always
     environment:
-      - NEXT_PUBLIC_API_URL=http://backend:8001
+      - NEXT_PUBLIC_API_URL=http://34.224.38.76:8001
