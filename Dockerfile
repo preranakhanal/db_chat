@@ -1,12 +1,13 @@
+
 # --- Build Stage ---
-FROM node:18 AS builder
+FROM node:20 AS builder
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
 
-# Install only production deps
-RUN npm ci --omit=dev
+# Install dependencies
+RUN npm install --production
 
 # Copy source files
 COPY . .
@@ -15,11 +16,16 @@ COPY . .
 RUN npm run build
 
 # --- Run Stage ---
-FROM node:18-alpine AS runner
+FROM node:20-alpine AS runner
 WORKDIR /app
 
-# Copy everything from builder stage
-COPY --from=builder /app /app
+# Copy only necessary files from builder
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/next.config.mjs ./next.config.mjs
+COPY --from=builder /app/.env ./.env
 
 EXPOSE 3000
 CMD ["npm", "start"]
