@@ -16,5 +16,5 @@ services:
       - "3000:3000"
     restart: always
     environment:
-    - NEXT_PUBLIC_API_URL=http://34.224.38.76:8001
-    - HOST=0.0.0.0
+      NEXT_PUBLIC_API_URL: http://34.224.38.76:8001
+      HOST: 0.0.0.0
