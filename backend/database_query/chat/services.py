@@ -10,7 +10,7 @@ def pick_relevant_tables(user_query, schema):
     all_tables = sorted({t for t, c, d in schema})
 
     response = client.chat.completions.create(
-        model="gpt-4o-mini",  # faster/cheaper for table picking
+        model="gpt-4o-mini",  # fast + cheap for table selection
         messages=[
             {
                 "role": "system",
@@ -39,23 +39,29 @@ def generate_sql(user_query, schema):
         user_query = ""
     print(f"User query: {user_query}")
 
-    # Step 1: filter schema
+    # Step 1: Pick relevant tables
     relevant_tables = pick_relevant_tables(user_query, schema)
 
-    # Step 2: only include relevant tables in schema string
+    # Step 2: Build schema string only with selected tables
     schema_str = "\n".join([
         f"{t}.{c} ({d})" for t, c, d in schema if t in relevant_tables
     ])
 
-    # Step 3: generate SQL
+    # Step 3: Generate SQL with strict rules
     response = client.chat.completions.create(
-        model="gpt-4o",  # stronger for SQL generation
+        model="gpt-4o",
         messages=[
             {
                 "role": "system",
                 "content": (
-                    f"You are a SQL generator. Schema:\n{schema_str}\n"
-                    "Only output SELECT queries."
+                    "You are a SQL generator for PostgreSQL.\n\n"
+                    f"Schema:\n{schema_str}\n\n"
+                    "Rules:\n"
+                    "- Use EXACTLY the table and column names as given in the schema.\n"
+                    "- Do not shorten, rename, or invent names.\n"
+                    "- Always fully qualify columns as table.column.\n"
+                    "- Only output SELECT queries.\n"
+                    "- Never guess column names. If unsure, pick only from schema."
                 )
             },
             {"role": "user", "content": user_query}
@@ -64,12 +70,14 @@ def generate_sql(user_query, schema):
 
     sql_response = response.choices[0].message.content.strip()
 
-    # Step 4: clean SQL (remove ``` markers)
+    # Step 4: Clean SQL (remove ``` markers)
     if sql_response.startswith("```sql") and sql_response.endswith("```"):
         sql_response = sql_response[6:-3].strip()
     elif sql_response.startswith("```") and sql_response.endswith("```"):
         sql_response = sql_response[3:-3].strip()
 
     print(f"Cleaned SQL response: {sql_response}")
+    print(f"Tables used: {relevant_tables}")
 
     return sql_response
+
