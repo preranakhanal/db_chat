@@ -17,12 +17,14 @@ def ensure_dynamic_registered(alias="dynamic"):
 def register_database(alias, params):
     settings.DATABASES[alias] = {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": params.get("NAME", "education_platform"),
-        "USER": params.get("USER", "postgres"),
-        "PASSWORD": params.get("PASSWORD", "root"),
-        "HOST": params.get("HOST", "localhost"),
-        "PORT": params.get("PORT", 5432),
-        "OPTIONS": {},
+        "NAME": params.get("NAME", "smis_ai_db"),
+        "USER": params.get("USER", "smis_aiuser"),
+        "PASSWORD": params.get("PASSWORD", "smisai"),
+        "HOST": params.get("HOST", "myschool.smis.online"),
+        "PORT": params.get("PORT", 6464),
+        "OPTIONS": {
+            "sslmode": "disable"
+        },
         "TIME_ZONE": getattr(settings, "TIME_ZONE", None),
         "ATOMIC_REQUESTS": False,
         "CONN_HEALTH_CHECKS": False,
