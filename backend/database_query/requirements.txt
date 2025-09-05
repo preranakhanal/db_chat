@@ -1,3 +1,7 @@
 django-cors-headers
 Django>=4.2
 openai
+psycopg2-binary
+django-rest-framework
+gunicorn
+python-dotenv
