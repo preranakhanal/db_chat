@@ -1,5 +1,5 @@
 django-cors-headers
-Django>=4.2
+Django>=3.2,<3.3
 openai
 psycopg2-binary
 django-rest-framework
