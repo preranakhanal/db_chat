@@ -13,23 +13,31 @@ export default function VoiceInput() {
     let rafId: number;
 
     if (listening) {
-      navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        analyser = audioCtx.createAnalyser();
-        source = audioCtx.createMediaStreamSource(stream);
-        source.connect(analyser);
-        analyser.fftSize = 64;
-        const dataArray = new Uint8Array(analyser.frequencyBinCount);
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then((stream) => {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          analyser = audioCtx.createAnalyser();
+          source = audioCtx.createMediaStreamSource(stream);
+          source.connect(analyser);
+          analyser.fftSize = 64;
+          const dataArray = new Uint8Array(analyser.frequencyBinCount);
 
-        const update = () => {
-          analyser!.getByteFrequencyData(dataArray);
-          // Use max value for a more dynamic bar
-          const max = Math.max(...dataArray);
-          setVolume(max);
-          rafId = requestAnimationFrame(update);
-        };
-        update();
-      });
+          const update = () => {
+            analyser!.getByteFrequencyData(dataArray);
+            // Use max value for a more dynamic bar
+            const max = Math.max(...dataArray);
+            setVolume(max);
+            rafId = requestAnimationFrame(update);
+          };
+          update();
+        })
+        .catch((err) => {
+          // Gracefully handle error (permission denied, unsupported, etc.)
+          setListening(false);
+          setVolume(0);
+          // Optionally log error or show feedback
+          console.error("getUserMedia error:", err);
+        });
     }
     return () => {
       cancelAnimationFrame(rafId);
