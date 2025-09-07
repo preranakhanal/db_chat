@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Database Schema Info</title>
+</head>
+<body>
+  <h1>Database Schema Documentation</h1>
+  <p>
+    This file contains the **design overview of the database**, including
+    all tables, their relationships, column data types, and indexing strategy.
+    It will be used to help the AI understand the database structure.
+  </p>
+
+  <h2>Example Table Documentation</h2>
+
+  <h3>Table: finepayments</h3>
+  <ul>
+    <li><strong>id</strong> (UUID, PK)</li>
+    <li><strong>user_id</strong> (FK → users.id)</li>
+    <li><strong>date</strong> (DATE)</li>
+    <li><strong>fine_amount</strong> (DECIMAL) – Gross fine applied</li>
+    <li><strong>finededuction</strong> (DECIMAL) – Deduction rules applied</li>
+    <li><strong>net_amount</strong> (DECIMAL) – Computed as fine - deduction</li>
+  </ul>
+
+  <h3>Relationships</h3>
+  <p>
+    <code>finepayments.user_id</code> → <code>users.id</code> (many-to-one).
+    Each payment belongs to a user record.
+  </p>
+
+  <!-- Repeat structure for all other tables -->
+</body>
+</html>
