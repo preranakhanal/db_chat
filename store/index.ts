@@ -1,10 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import counterReducer from './features/counterSlice';
+import speechToTextReducer from './features/speechToTextSlice';
 
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
-    // add more reducers here
+    speechToText: speechToTextReducer,
   },
 });
 

@@ -2,11 +2,13 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Send } from "lucide-react"
 import VoiceInput from "@/components/ui/voice-input"
+import { useAppSelector, useAppDispatch } from "@/store/hooks"
+import { clearText } from "@/store/features/speechToTextSlice"
 
 
 interface Message {
@@ -20,6 +22,15 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState<string>("")
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const recognizedText = useAppSelector((state: any) => state.speechToText.text);
+  const dispatch = useAppDispatch();
+  // If recognizedText changes, set it as input and clear from redux
+  useEffect(() => {
+    if (recognizedText) {
+      setInput(recognizedText);
+      dispatch(clearText());
+    }
+  }, [recognizedText, dispatch]);
 
   const handleSend = async () => {
     if (!input.trim()) return
@@ -31,7 +42,7 @@ export default function ChatPage() {
       timestamp: new Date(),
     }
 
-  setMessages((prev: Message[]) => [...prev, userMessage])
+    setMessages((prev: Message[]) => [...prev, userMessage])
     setInput("")
     setIsLoading(true)
 
@@ -164,5 +175,7 @@ export default function ChatPage() {
         </div>
       </div>
     </div>
+
   )
 }
+
