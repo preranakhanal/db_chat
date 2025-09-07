@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Exception Handling Rules</title>
+</head>
+<body>
+  <h1>Exception Handling Guide</h1>
+  <p>
+    This file contains <strong>common errors, ambiguities, or edge cases</strong> and
+    how the system should handle them before or after generating SQL.
+  </p>
+
+  <h2>Rules</h2>
+
+  <h3>Missing Column in Query</h3>
+  <p>
+    If a user asks for a column not found in schema:
+    <ul>
+      <li>Check for <em>similar column names</em> (typo correction).</li>
+      <li>If multiple matches: ask clarifying question.</li>
+      <li>If none: return error message with suggestion.</li>
+    </ul>
+  </p>
+
+  <h3>Ambiguous Metric</h3>
+  <p>
+    If query requests "revenue", ask:
+    <ul>
+      <li>"Do you mean gross revenue, net revenue, or adjusted revenue?"</li>
+    </ul>
+  </p>
+
+  <h3>Restricted Query Type</h3>
+  <p>
+    - Only <strong>SELECT</strong> queries allowed.  
+    - If user asks for `DELETE`, `INSERT`, or `UPDATE`, respond with:  
+      <em>"This system only supports READ queries for safety."</em>
+  </p>
+
+  <h3>Empty Result</h3>
+  <p>
+    If query returns zero rows:
+    <ul>
+      <li>Respond gracefully: "No records found, please refine filters."</li>
+      <li>Suggest potential filters (date range, status, etc.).</li>
+    </ul>
+  </p>
+</body>
+</html>
