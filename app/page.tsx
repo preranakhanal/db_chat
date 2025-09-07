@@ -6,6 +6,8 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Send } from "lucide-react"
+import VoiceInput from "@/components/ui/voice-input"
+
 
 interface Message {
   id: string
@@ -18,6 +20,7 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState<string>("")
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isVoiceActive, setIsVoiceActive] = useState(false)
 
   const handleSend = async () => {
     if (!input.trim()) return
@@ -149,6 +152,7 @@ export default function ChatPage() {
                 disabled={isLoading}
               />
             </div>
+            <VoiceInput />
             <Button
               onClick={handleSend}
               disabled={!input.trim() || isLoading}
