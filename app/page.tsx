@@ -20,7 +20,6 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState<string>("")
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [isVoiceActive, setIsVoiceActive] = useState(false)
 
   const handleSend = async () => {
     if (!input.trim()) return
