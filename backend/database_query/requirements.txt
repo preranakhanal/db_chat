@@ -5,3 +5,8 @@ psycopg2-binary
 django-rest-framework
 gunicorn
 python-dotenv
+
+openai-whisper
+coqui-tts
+torch
+soundfile
